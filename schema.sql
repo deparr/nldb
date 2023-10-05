@@ -1,6 +1,6 @@
 CREATE TABLE channel (
     id INT,
-    username VARCHAR(16) NOT NULL UNIQUE,
+    username VARCHAR(16) NOT NULL,
     subscriptions INT,
     created_at DATE NOT NULL,
     PRIMARY KEY (id),
