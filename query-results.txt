@@ -1,0 +1,77 @@
+-------------------------------
+SELECT user.username, channel.username
+FROM user
+JOIN usersubscription ON user.username = usersubscription.username
+JOIN channel ON usersubscription.channel_id = channel.id;
+('ylim', 'ylim')
+('selz', 'selz')
+('dpar', 'dpar')
+('ylim', 'selz')
+('dpar', 'selz')
+('selz', 'dpar')
+--------------------------------
+SELECT u.username, c.username
+FROM user u
+JOIN channel c ON u.username = c.username
+ORDER BY u.joindate, c.created_at;
+
+('dpar', 'dpar')
+('ylim', 'ylim')
+('selz', 'selz')
+--------------------------------
+Please fetch the content and video id of all comments made by user 'dpar'
+SELECT content, video_id
+FROM comment
+WHERE username = 'dpar';
+
+SUCCESS:
+
+('thats raaaaaaad!~', 1)
+--------------------------------
+Please fetch the most viewed videos and users who posted them. Group the results by channel id
+SELECT video.channel_id, video.id, video.views, user.username
+FROM video
+JOIN channel ON video.channel_id = channel.id
+JOIN user ON channel.username = user.username
+ORDER BY video.views DESC
+GROUP BY video.channel_id
+
+FAILURE: near "GROUP": syntax error
+--------------------------------
+Please fetch the most viewed videos and users who posted them. Group the results by channel id
+SELECT video.channel_id, video.id, user.username
+FROM video
+JOIN channel ON video.channel_id = channel.id
+JOIN user ON channel.username = user.username
+ORDER BY video.views DESC
+GROUP BY video.channel_id;
+
+FAILURE: near "GROUP": syntax error
+--------------------------------
+Get all the videos watched by user 'ylim', sorted by watch date
+
+SELECT video.*
+FROM video
+JOIN history ON video.id = history.video_id
+JOIN user ON history.username = user.username
+WHERE user.username = 'ylim'
+ORDER BY history.date_watched;
+
+SUCCESS:
+(1, 1, 30, 0, 'chipmunk eating a squirrel', 3000)
+--------------------------------
+Add a new user, 'deepee', who joined on October 1st, 1973
+
+INSERT INTO user (username, joindate) VALUES ('deepee', '1973-10-01');
+
+SUCCESS:
+--------------------------------
+Show me all users
+
+SELECT * FROM user;
+
+SUCCESS:
+('ylim', '2023-09-10')
+('selz', '2023-09-10')
+('dpar', '2023-09-10')
+('deepee', '1973-10-01')
