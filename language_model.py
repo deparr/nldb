@@ -190,7 +190,7 @@ def query(conn, prompt):
             {"role": "user", "content": prompt}
         ],
         max_tokens=None,
-        temperature=2
+        temperature=1
     )
 
     gpt_query = response.choices[0].message.content

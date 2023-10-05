@@ -332,3 +332,61 @@ VALUES (1, 5, 'user1', 'Python is a great programming language.'),
        (10, 5, 'user10', 'Python is used in artificial intelligence applications.');
 
 FAILURE: UNIQUE constraint failed: comment.id
+--------------------------------
+10 users liked video 3 and also left comments about python
+
+SELECT username FROM history WHERE video_id = 3 AND username IN (SELECT username FROM comment WHERE content = 'python') AND username IN (SELECT username FROM usersubscription) LIMIT 10;
+
+SUCCESS:
+--------------------------------
+10 new users liked video 3
+INSERT INTO likes (user_id, video_id)
+SELECT user.id, 3
+FROM user
+WHERE user.id NOT IN (SELECT user_id FROM likes WHERE video_id = 3)
+LIMIT 10;
+
+FAILURE: no such table: likes
+--------------------------------
+10 users watched video 3
+
+SELECT * FROM history WHERE video_id = 3 LIMIT 10;
+
+SUCCESS:
+('dpar', 3, '2023-09-01')
+--------------------------------
+video 3 was watched 10 more times
+
+UPDATE video
+SET views = views + 10
+WHERE id = 3;
+
+SUCCESS:
+--------------------------------
+video 3 was watched 10 more times
+
+UPDATE video SET views = views + 10 WHERE id = 3;
+
+SUCCESS:
+--------------------------------
+10 additional users liked video 4
+
+UPDATE video 
+SET likes = likes + 10 
+WHERE id = 4;
+
+SUCCESS:
+--------------------------------
+10 additional users liked video 4
+
+UPDATE video
+SET likes = likes + 10
+WHERE id = 4;
+
+SUCCESS:
+--------------------------------
+10 additional users disliked video 4
+
+UPDATE video SET dislikes = dislikes + 10 WHERE id = 4;
+
+SUCCESS:
