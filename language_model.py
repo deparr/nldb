@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sqlite3
 from sqlite3 import Error
@@ -47,11 +48,8 @@ insert_statements = ("""INSERT INTO user (username, joindate) VALUES
   """
                      )
 
-# new_openai_key = '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'
-
-
-# openai.api_key = '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'
-openai.api_key = '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'
+# openai.api_key = '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'
+openai.api_key = os.getenv("OPENAI_KEY")
 
 
 def create_connection(db_file):
@@ -185,16 +183,7 @@ prefix = """
 """
 
 
-if __name__ == '__main__':
-    need_to_create = not os.path.isfile(r"./pythonsqlite.db")
-    conn = create_connection(r"./pythonsqlite.db")
-    if need_to_create:
-        print('initializing db...')
-        init_database(conn)
-    else:
-        print('using existing db')
-
-    prompt = input("ChatGPT has been provided with the table schemas, make your query:\n")
+def query(conn, prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -230,4 +219,19 @@ if __name__ == '__main__':
                 print(f'{prompt}\n{gpt_query}', file=f, end='\n\n')
                 print(f'FAILURE: {e}', file=f)
 
+
+if __name__ == '__main__':
+    need_to_create = not os.path.isfile(r"./pythonsqlite.db")
+    conn = create_connection(r"./pythonsqlite.db")
+    if need_to_create:
+        print('initializing db...')
+        init_database(conn)
+    else:
+        print('using existing db')
+
+    yn = 'y'
+    while yn.lower() == 'y':
+        prompt = input("ChatGPT has been provided with the table schemas, make your query:\n")
+        query(conn, prompt)
+        yn = input('Make another query? (y/n) ')
     conn.close()

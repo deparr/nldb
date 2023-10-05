@@ -75,3 +75,45 @@ SUCCESS:
 ('selz', '2023-09-10')
 ('dpar', '2023-09-10')
 ('deepee', '1973-10-01')
+--------------------------------
+Get the views and like to dislike ratio of all videos, grouped by channel id
+
+SELECT v.channel_id, SUM(v.views) AS total_views, 
+       SUM(v.likes) / SUM(v.dislikes) AS like_to_dislike_ratio
+FROM video v
+GROUP BY v.channel_id;
+
+SUCCESS:
+(1, 3000, None)
+(2, 1000000, None)
+(3, 1000000, 0)
+--------------------------------
+Get the viewcount and like to dislike ratio of each individual video
+
+SELECT video.id, video.views, (video.likes / video.dislikes) AS like_to_dislike_ratio
+FROM video;
+
+SUCCESS:
+(1, 3000, None)
+(2, 1000000, None)
+(3, 1000000, 0)
+--------------------------------
+Get the dislike to like ratio and view count for all videos posted by user 'dpar'
+
+SELECT video.id, (video.dislikes / video.likes) AS dislike_to_like_ratio, video.views
+FROM video
+JOIN channel ON video.channel_id = channel.id
+JOIN user ON channel.username = user.username
+WHERE user.username = 'dpar';
+
+SUCCESS:
+(3, None, 1000000)
+(5, 154, 12312344)
+(6, 0, 2342341)
+(7, 80, 7083123)
+--------------------------------
+Update video with id 3 and add 345 dislikes to it
+
+UPDATE video SET dislikes = dislikes + 345 WHERE id = 3;
+
+SUCCESS:
