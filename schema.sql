@@ -15,7 +15,7 @@ CREATE TABLE video (
     description TEXT,
     views INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (channel_id) REFERENCES channel(channel_id)
+    FOREIGN KEY (channel_id) REFERENCES channel(id)
 );
 
 CREATE TABLE user (

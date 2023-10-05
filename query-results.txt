@@ -117,3 +117,218 @@ Update video with id 3 and add 345 dislikes to it
 UPDATE video SET dislikes = dislikes + 345 WHERE id = 3;
 
 SUCCESS:
+--------------------------------
+Get all channels with videos that have more than 500 likes
+
+SELECT channel.*
+FROM channel
+JOIN video ON channel.id = video.channel_id
+WHERE video.likes > 500;
+
+SUCCESS:
+(2, 'selz', 50, '2023-10-01')
+(2, 'selz', 50, '2023-10-01')
+(3, 'dpar', 40, '2023-10-01')
+(3, 'dpar', 40, '2023-10-01')
+--------------------------------
+Get all channels with videos that have more than 500 likes, but only show each channel once
+
+SELECT DISTINCT channel.id, channel.username
+FROM channel
+JOIN video ON channel.id = video.channel_id
+WHERE video.likes > 500;
+
+SUCCESS:
+(2, 'selz')
+(3, 'dpar')
+--------------------------------
+Get all channels with videos that have more than 500 likes, but only show each channel once and group by channel username
+
+SELECT c.username
+FROM channel c
+JOIN video v ON c.id = v.channel_id
+WHERE v.likes > 500
+GROUP BY c.username;
+
+SUCCESS:
+('dpar',)
+('selz',)
+('ylim',)
+--------------------------------
+Get all fields from channels with videos that have more than 500 likes, but only list each channel once and group by channel username
+
+SELECT c.username
+FROM channel c
+JOIN video v ON c.id = v.channel_id
+WHERE v.likes > 500
+GROUP BY c.username;
+
+SUCCESS:
+('dpar',)
+('selz',)
+('ylim',)
+--------------------------------
+Get all attributes from all channels with videos that have more than 500 likes, but only show distinct channels in the result and group them by channel username
+
+SELECT DISTINCT channel.username
+FROM channel
+JOIN video ON channel.id = video.channel_id
+WHERE video.likes > 500
+GROUP BY channel.username;
+
+SUCCESS:
+('dpar',)
+('selz',)
+('ylim',)
+--------------------------------
+Get the channels with videos that have more than 500 likes. Include all fields of each channel in the result
+
+SELECT channel.* 
+FROM channel 
+JOIN video ON channel.id = video.channel_id 
+WHERE video.likes > 500;
+
+SUCCESS:
+(2, 'selz', 50, '2023-10-01')
+(2, 'selz', 50, '2023-10-01')
+(3, 'dpar', 40, '2023-10-01')
+(3, 'dpar', 40, '2023-10-01')
+(2, 'selz', 50, '2023-10-01')
+(4, 'ylim', 2342, '2023-12-23')
+(5, 'ylim', 54345, '2020-05-23')
+--------------------------------
+Get distinct channels with videos that have more than 500 likes. Include all fields of each channel in the result
+
+SELECT DISTINCT channel.* 
+FROM channel 
+JOIN video ON channel.id = video.channel_id 
+WHERE video.likes > 500;
+
+SUCCESS:
+(2, 'selz', 50, '2023-10-01')
+(3, 'dpar', 40, '2023-10-01')
+(4, 'ylim', 2342, '2023-12-23')
+(5, 'ylim', 54345, '2020-05-23')
+--------------------------------
+Get distinct channels with videos that have more than 500 likes. Include all fields of each channel in the result. Sort subscribers
+
+SELECT DISTINCT channel.* 
+FROM channel 
+JOIN video ON channel.id = video.channel_id 
+WHERE video.likes > 500 
+ORDER BY channel.subscriptions;
+
+SUCCESS:
+(3, 'dpar', 40, '2023-10-01')
+(2, 'selz', 50, '2023-10-01')
+(4, 'ylim', 2342, '2023-12-23')
+(5, 'ylim', 54345, '2020-05-23')
+--------------------------------
+User 'dpar' watched video 7 on October 3, 2023
+
+INSERT INTO history (username, video_id, date_watched) 
+VALUES ('dpar', 7, '2023-10-03');
+
+SUCCESS:
+--------------------------------
+User 'dpar' changed their username to 'deeparr'
+
+UPDATE user SET username = 'deeparr' WHERE username = 'dpar';
+
+SUCCESS:
+--------------------------------
+I want to see a list of individual channels that have more than 500 likes on a video
+
+SELECT channel.username
+FROM channel
+JOIN video ON channel.id = video.channel_id
+WHERE video.likes > 500;
+
+SUCCESS:
+('selz',)
+('selz',)
+('dpar',)
+('dpar',)
+('selz',)
+('ylim',)
+('ylim',)
+--------------------------------
+Ten users added insightful comments on video 5 
+INSERT INTO comment (id, video_id, username, content)
+VALUES (1, 5, 'user1', 'Insightful comment 1'),
+       (2, 5, 'user2', 'Insightful comment 2'),
+       (3, 5, 'user3', 'Insightful comment 3'),
+       (4, 5, 'user4', 'Insightful comment 4'),
+       (5, 5, 'user5', 'Insightful comment 5'),
+       (6, 5, 'user6', 'Insightful comment 6'),
+       (7, 5, 'user7', 'Insightful comment 7'),
+       (8, 5, 'user8', 'Insightful comment 8'),
+       (9, 5, 'user9', 'Insightful comment 9'),
+       (10, 5, 'user10', 'Insightful comment 10');
+
+FAILURE: UNIQUE constraint failed: comment.id
+--------------------------------
+I want to watch a video about python
+
+SELECT *
+FROM video
+WHERE description LIKE '%python%'
+LIMIT 1;
+
+SUCCESS:
+(5, 3, 323, 50012, 'Why python is actually faster than C', 12312344)
+--------------------------------
+Ten users added comments about python on video 5
+INSERT INTO comment (id, video_id, username, content)
+VALUES (1, 5, 'user1', 'I love Python!'),
+       (2, 5, 'user2', 'Python is my favorite programming language.'),
+       (3, 5, 'user3', 'Python is so versatile.'),
+       (4, 5, 'user4', 'Python has a great community.'),
+       (5, 5, 'user5', 'Python makes coding fun.'),
+       (6, 5, 'user6', 'Python is easy to learn.'),
+       (7, 5, 'user7', 'Python is used in data science.'),
+       (8, 5, 'user8', 'Python has a lot of libraries.'),
+       (9, 5, 'user9', 'Python is widely used in web development.'),
+       (10, 5, 'user10', 'Python has a clean syntax.');
+
+FAILURE: UNIQUE constraint failed: comment.id
+--------------------------------
+I want to see videos that have above average like count
+
+SELECT *
+FROM video
+WHERE likes > (SELECT AVG(likes) FROM video)
+;
+
+SUCCESS:
+(2, 2, 1000, 0, 'cat flying kicking a 100 year old grandma in a wheelchair', 1000000)
+(4, 2, 2342, 231, 'Creating an http server in ts', 2002342)
+(6, 3, 2342, 1231, 'Taking another look at Golang', 2342341)
+--------------------------------
+I want to see the channels with total likes above the average
+
+SELECT channel.id, channel.username, SUM(video.likes) AS total_likes
+FROM channel
+JOIN video ON channel.id = video.channel_id
+GROUP BY channel.id, channel.username
+HAVING total_likes > (SELECT AVG(likes) FROM video)
+ORDER BY total_likes DESC;
+
+SUCCESS:
+(2, 'selz', 3942)
+(3, 'dpar', 3420)
+--------------------------------
+Ten users added comments about python on video 5
+INSERT INTO comment (id, video_id, username, content) 
+VALUES (1, 5, 'user1', 'Python is a great programming language.'),
+       (2, 5, 'user2', 'I love Python! It is so versatile.'),
+       (3, 5, 'user3', 'Python has a clean syntax.'),
+       (4, 5, 'user4', 'Python is widely used in data science.'),
+       (5, 5, 'user5', 'Python is easy to learn and read.'),
+       (6, 5, 'user6', 'I use Python for web development.'),
+       (7, 5, 'user7', 'Python has a large and supportive community.'),
+       (8, 5, 'user8', 'Python is my go-to programming language.'),
+       (9, 5, 'user9', 'Python is used for automation tasks.'),
+       (10, 5, 'user10', 'Python is used in artificial intelligence applications.');
+
+FAILURE: UNIQUE constraint failed: comment.id

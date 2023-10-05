@@ -81,7 +81,7 @@ def init_database(conn):
                 description TEXT,
                 views INT NOT NULL,
                 PRIMARY KEY (id),
-                FOREIGN KEY (channel_id) REFERENCES channel(channel_id)
+                FOREIGN KEY (channel_id) REFERENCES channel(id)
               );
     """,
         """CREATE TABLE user (
@@ -149,7 +149,7 @@ prefix = """
                 description TEXT,
                 views INT NOT NULL,
                 PRIMARY KEY (id),
-                FOREIGN KEY (channel_id) REFERENCES channel(channel_id)
+                FOREIGN KEY (channel_id) REFERENCES channel(id)
         );
         CREATE TABLE user (
                 username TEXT,
@@ -190,7 +190,7 @@ def query(conn, prompt):
             {"role": "user", "content": prompt}
         ],
         max_tokens=None,
-        temperature=0
+        temperature=2
     )
 
     gpt_query = response.choices[0].message.content
