@@ -48,7 +48,6 @@ insert_statements = ("""INSERT INTO user (username, joindate) VALUES
   """
                      )
 
-# openai.api_key = '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'
 openai.api_key = os.getenv("OPENAI_KEY")
 
 
@@ -234,4 +233,5 @@ if __name__ == '__main__':
         prompt = input("ChatGPT has been provided with the table schemas, make your query:\n")
         query(conn, prompt)
         yn = input('Make another query? (y/n) ')
+
     conn.close()
