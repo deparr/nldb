@@ -86,7 +86,7 @@ def init_database(conn):
     """,
         """CREATE TABLE user (
                 username TEXT,
-                joindate TEXT NOT NULL,
+                joindate DATE NOT NULL,
                 PRIMARY KEY (username)
             );
     """,
@@ -130,7 +130,7 @@ def init_database(conn):
 
 
 prefix = """
-        I will give you series of SQLite3 create table statements. In subsequent messages I will provide a statement in natural language, I want you to create an SQL query based on my statement. Your query will always end with a semicolon (;). You will reply with only your SQL query, nothing else.
+        I will give you series of SQLite3 create table statements. In subsequent messages I will provide a statement in natural language; I want you to create an SQL query based on my statement. Your query will always end with a semicolon (;). You will reply with only your SQL query, nothing else.
         begin SQLite3 statements:
 
         CREATE TABLE channel (
@@ -153,7 +153,7 @@ prefix = """
         );
         CREATE TABLE user (
                 username TEXT,
-                joindate TEXT NOT NULL,
+                joindate DATE NOT NULL,
                 PRIMARY KEY (username)
         );
         CREATE TABLE history (
@@ -190,7 +190,7 @@ def query(conn, prompt):
             {"role": "user", "content": prompt}
         ],
         max_tokens=None,
-        temperature=1
+        temperature=0
     )
 
     gpt_query = response.choices[0].message.content
