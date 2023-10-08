@@ -390,3 +390,79 @@ SUCCESS:
 UPDATE video SET dislikes = dislikes + 10 WHERE id = 4;
 
 SUCCESS:
+--------------------------------
+I want to watch a video about C++ or one about python
+
+SELECT *
+FROM video
+WHERE description LIKE '%C++%' OR description LIKE '%python%'
+LIMIT 1;
+
+SUCCESS:
+(5, 3, 323, 50012, 'Why python is actually faster than C', 12312344)
+--------------------------------
+I want to watch videos about C++, rust, or python
+
+SELECT video.id, video.description
+FROM video
+JOIN channel ON video.channel_id = channel.id
+WHERE channel.username IN ('C++', 'rust', 'python');
+
+SUCCESS:
+--------------------------------
+I want to watch C++ content
+
+SELECT video.id, video.description, video.views
+FROM video
+JOIN channel ON video.channel_id = channel.id
+WHERE channel.username = 'C++'
+ORDER BY video.views DESC;
+
+SUCCESS:
+--------------------------------
+C++ videos
+
+SELECT video.id, video.description
+FROM video
+JOIN channel ON video.channel_id = channel.id
+WHERE channel.username = 'C++'
+ORDER BY video.views DESC;
+
+SUCCESS:
+--------------------------------
+all vidwos
+
+SELECT * FROM video;
+
+SUCCESS:
+(1, 1, 30, 0, 'chipmunk eating a squirrel', 3000)
+(2, 2, 1000, 0, 'cat flying kicking a 100 year old grandma in a wheelchair', 1000000)
+(3, 3, 232, 100345, 'teen eating raisin brans in bacon grease', 1000020)
+(4, 2, 2362, 241, 'Creating an http server in ts', 2002342)
+(5, 3, 323, 50012, 'Why python is actually faster than C', 12312344)
+(6, 3, 2342, 1231, 'Taking another look at Golang', 2342341)
+(7, 3, 523, 42342, 'Why C++ is my favorite language', 7083123)
+(8, 2, 600, 1000, 'Using chatgpt with python', 301)
+(9, 4, 756, 1000, 'Using chatgpt with rust', 301)
+(10, 5, 756, 1000, 'Using chatgpt with typescript', 301)
+--------------------------------
+Show me Golang videos
+
+SELECT video.id, video.description
+FROM video
+JOIN channel ON video.channel_id = channel.id
+WHERE channel.username = 'Golang'
+ORDER BY video.views DESC;
+
+SUCCESS:
+--------------------------------
+Show me videos about Golang
+
+SELECT video.id, video.description
+FROM video
+JOIN channel ON video.channel_id = channel.id
+WHERE video.description LIKE '%Golang%'
+;
+
+SUCCESS:
+(6, 'Taking another look at Golang')
